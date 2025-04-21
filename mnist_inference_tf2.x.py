@@ -1,20 +1,17 @@
-'''This is inference code for MNIST dataset'''
-
-import tensorflow as tf
+from __future__ import print_function
+import tensorflow.keras
 from tensorflow.keras.models import load_model
 from PIL import Image
 import numpy as np
 import pandas as pd
+import tensorflow as tf
 import os
 
 # Load the trained model
-model = load_model('saved_model/')
-
-# Show model architecture
+model = tf.keras.models.load_model('saved_model/')
 model.summary()
 
-# ---- Actual test for digits ----
-print("\n---- Actual test for digits ----")
+print("\n----Actual test for digits----\n")
 
 mnist_label_file_path = "dataset_test/testlabels/t_labels.txt"
 with open(mnist_label_file_path, "r") as mnist_label:
@@ -32,22 +29,21 @@ for index in range(10):
     im2arr = np.array(img).astype('float32') / 255.0
     im2arr = im2arr.reshape(1, 28, 28, 1)
 
-    # Predict the class
+    # Predict
     y_pred = model.predict(im2arr)
-    pred_label = np.argmax(y_pred)
+    pred_label = np.argmax(y_pred, axis=1)[0]
 
     print(f"label = {label} --> predicted label = {pred_label}")
 
-    # Compute accuracy
     if int(label) == pred_label:
         cnt_correct += 1
 
-# Final accuracy
-final_acc = cnt_correct / 10
-print(f"\nFinal test accuracy: {final_acc:.2f}")
-print(f"\n**** TensorFlow version: {tf.__version__} ****\n")
+# Accuracy
+Final_acc = cnt_correct / 10
+print(f"\nFinal test accuracy: {Final_acc:.2f}\n")
+print('****tensorflow version****:', tf.__version__)
 
-# Student info output
+# 학번 출력
 data = {
     '이름': ['신원지'],
     '학번': [2312010],
